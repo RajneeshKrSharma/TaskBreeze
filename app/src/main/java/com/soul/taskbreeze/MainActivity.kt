@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.soul.taskbreeze.auth.login.presentation.LoginScreen
-import com.soul.taskbreeze.auth.split_expense.presentation.SplitExpenseScreen
+import com.soul.taskbreeze.post_auth.split_expense.presentation.SplitExpenseScreen
 import com.soul.taskbreeze.post_auth.home.presentation.HomeScreen
 import com.soul.taskbreeze.pre_auth.pre_auth_loading.presentation.PreAuthScreen
 import com.soul.taskbreeze.pre_auth.presentation.Screen

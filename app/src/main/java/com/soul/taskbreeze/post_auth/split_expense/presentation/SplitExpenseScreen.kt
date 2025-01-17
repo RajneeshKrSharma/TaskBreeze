@@ -1,4 +1,4 @@
-package com.soul.taskbreeze.auth.split_expense.presentation
+package com.soul.taskbreeze.post_auth.split_expense.presentation
 
 
 import androidx.compose.foundation.background
@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.soul.taskbreeze.auth.split_expense.data.remote.dto.GroupExpenseResponseDto
+import com.soul.taskbreeze.post_auth.split_expense.data.remote.dto.GroupExpenseResponseDto
 import kotlinx.coroutines.launch
 import java.util.Stack
 

@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
 import com.soul.taskbreeze.auth.login.data.remote.LoginApis
-import com.soul.taskbreeze.auth.split_expense.data.remote.dto.SplitExpenseApis
+import com.soul.taskbreeze.post_auth.split_expense.data.remote.dto.SplitExpenseApis
 import com.soul.taskbreeze.core.ConnectivityChecker
 import com.soul.taskbreeze.core.PendingRequestManager
 import com.soul.taskbreeze.core.config.SharedPrefConfig

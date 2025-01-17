@@ -1,7 +1,7 @@
-package com.soul.taskbreeze.auth.split_expense.domain.use_case
+package com.soul.taskbreeze.post_auth.split_expense.domain.use_case
 
-import com.soul.taskbreeze.auth.split_expense.data.remote.dto.GroupExpenseResponseDto
-import com.soul.taskbreeze.auth.split_expense.domain.repository.SplitExpenseRepository
+import com.soul.taskbreeze.post_auth.split_expense.data.remote.dto.GroupExpenseResponseDto
+import com.soul.taskbreeze.post_auth.split_expense.domain.repository.SplitExpenseRepository
 import com.soul.taskbreeze.core.ApiUseCase
 import com.soul.taskbreeze.core.util.Resource
 import javax.inject.Inject

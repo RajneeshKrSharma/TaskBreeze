@@ -1,11 +1,11 @@
-package com.soul.taskbreeze.auth.split_expense.presentation
+package com.soul.taskbreeze.post_auth.split_expense.presentation
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.soul.taskbreeze.auth.split_expense.data.remote.dto.GroupExpenseResponseDto
-import com.soul.taskbreeze.auth.split_expense.domain.use_case.GetGroupExpenseUseCase
+import com.soul.taskbreeze.post_auth.split_expense.data.remote.dto.GroupExpenseResponseDto
+import com.soul.taskbreeze.post_auth.split_expense.domain.use_case.GetGroupExpenseUseCase
 import com.soul.taskbreeze.core.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class SplitExpenseViewModel @Inject constructor(
             with(getGroupExpenseUseCase.execute()) {
                 when (this) {
                     is Resource.Success -> {
-                        _groupExpenseState.value = this.data ?: GroupExpenseResponseDto.empty()
+                        _groupExpenseState.value = this.data ?: com.soul.taskbreeze.post_auth.split_expense.data.remote.dto.GroupExpenseResponseDto.empty()
                     }
 
                     is Resource.Error -> TODO()
