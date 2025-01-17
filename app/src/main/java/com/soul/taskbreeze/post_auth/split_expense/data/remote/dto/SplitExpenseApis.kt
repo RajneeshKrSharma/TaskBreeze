@@ -1,4 +1,4 @@
-package com.soul.taskbreeze.auth.split_expense.data.remote.dto
+package com.soul.taskbreeze.post_auth.split_expense.data.remote.dto
 
 import com.soul.taskbreeze.core.network.Api.GROUP_EXPENSE
 import com.soul.taskbreeze.core.network.BaseApi

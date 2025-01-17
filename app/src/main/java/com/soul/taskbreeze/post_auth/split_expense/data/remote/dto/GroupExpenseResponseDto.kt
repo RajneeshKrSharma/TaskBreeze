@@ -1,4 +1,4 @@
-package com.soul.taskbreeze.auth.split_expense.data.remote.dto
+package com.soul.taskbreeze.post_auth.split_expense.data.remote.dto
 
 
 import com.google.gson.annotations.SerializedName
