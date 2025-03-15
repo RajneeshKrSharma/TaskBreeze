@@ -1,7 +1,5 @@
 package com.soul.taskbreeze.auth.login.presentation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,52 +8,68 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.soul.taskbreeze.R
 import com.soul.taskbreeze.auth.login.data.remote.dto.LoginViaOtpRequestDto
-import com.soul.taskbreeze.pre_auth.pre_auth_loading.presentation.Screen
+import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewmodel = hiltViewModel(),
     navController: NavController
 ) {
-    // State to hold OTP values (4 digits)
-    val otpState = remember { mutableStateListOf("", "", "", "") }
-
-    // State to hold the mobile number entered by the user
-    val mobileNumberState = remember { mutableStateOf("") }
-
+    val otpState = remember { mutableStateListOf("", "", "", "", "", "") }
+    val emailIdState = remember { mutableStateOf("") }
+    var isEmailValid = remember { mutableStateOf(false) }
     val requestOtpState = viewModel.getOtpState.value
     val requestLoginViaOtpState = viewModel.loginViaOtpState.value
 
-    LaunchedEffect(requestLoginViaOtpState) {
-        if (requestLoginViaOtpState.data != null) {
-            navController.navigate(Screen.HomeScreen.route)
+    val focusRequesters = List(6) { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    var timerValue = remember { mutableIntStateOf(120) }
+    val timerRunning = remember { mutableStateOf(false) }
+
+    LaunchedEffect(requestOtpState.data) {
+        if (requestOtpState.data != null) {
+            focusRequesters[0].requestFocus()
+            timerValue.value = 120 // Reset timer to 2 minutes
+            timerRunning.value = true // Start timer
+        }
+    }
+
+    LaunchedEffect(timerRunning.value) {
+        if (timerRunning.value) {
+            while (timerValue.intValue > 0) {
+                delay(1000L)
+                timerValue.intValue --
+            }
+            timerRunning.value = false
         }
     }
 
@@ -66,68 +80,67 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header Text
         Text(
-            text = "Enter your mobile number",
-            fontSize = 18.sp,
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(bottom = 16.dp),
+            text = "Let's Login . .",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.W900,
+            modifier = Modifier.align(Alignment.Start),
         )
-
-        // Row with Indian flag and +91 country code
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.indian_flag),
-                contentDescription = "Indian Flag",
-                modifier = Modifier
-                    .size(40.dp)
-                    .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "+91",
-                fontSize = 18.sp,
-                modifier = Modifier.padding(end = 8.dp)
-            )
-            OutlinedTextField(
-                value = mobileNumberState.value, // Bind this to the state variable
-                onValueChange = { newValue ->
-                    // Only update the value if it is a valid phone number (numeric only)
-                    if (newValue.all { it.isDigit() } && newValue.length <= 10) {
-                        mobileNumberState.value = newValue
-                    }
-                },
-                label = { Text("Enter mobile number") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
         Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Enter your email id",
+            fontSize = 18.sp,
+            color = Color.Gray,
+            modifier = Modifier.align(Alignment.Start),
+        )
+        OutlinedTextField(
+            value = emailIdState.value,
+            onValueChange = { newValue ->
+                emailIdState.value = newValue
+                isEmailValid.value = newValue.matches(emailPattern)
+            },
+            label = { Text("Email Id") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            modifier = Modifier.fillMaxWidth(),
+            enabled = requestOtpState.data == null,
+            supportingText = {
+                if (!isEmailValid.value && emailIdState.value.isNotEmpty()) {
+                    Text("Invalid email format", color = Color.Red, fontSize = 12.sp)
+                }
+            }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
 
-        // OTP Entry Section
-        requestOtpState.data?.let { data ->
+        requestOtpState.data?.let {
+            Text(
+                text = String.format("%02d:%02d", timerValue.intValue / 60, timerValue.intValue % 60),
+                fontSize = 16.sp,
+                color = Color.Red,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                // Convert otp string to char array and iterate over it
-                data.otp?.toString()?.forEachIndexed { index, otpChar ->
+                repeat(6) { index ->
                     OutlinedTextField(
-                        value = otpChar.toString(), // Binding to the specific OTP field
+                        value = otpState[index],
                         onValueChange = { newValue ->
-                            // Only update the current OTP box if the input is a number
-                            if (newValue.length <= 1 && newValue.all { it.isDigit() }) {
+                            if (newValue.length <= 1) {
                                 otpState[index] = newValue
+                                if (newValue.isNotEmpty() && index < 5) {
+                                    focusRequesters[index + 1].requestFocus()
+                                } else if (index == 5) {
+                                    focusManager.clearFocus()
+                                }
                             }
                         },
                         modifier = Modifier
                             .width(50.dp)
-                            .height(60.dp),
+                            .height(80.dp)
+                            .focusRequester(focusRequesters[index]),
                         textStyle = LocalTextStyle.current.copy(
                             textAlign = TextAlign.Center,
                             fontSize = 18.sp
@@ -136,53 +149,27 @@ fun LoginScreen(
                         singleLine = true
                     )
                 }
-                    ?: LoginButton(
-                        btnName = "Request OTP"
-                    ) {
-                        viewModel.getOtp("+91${mobileNumberState.value}")
-                    }
             }
             Spacer(modifier = Modifier.height(24.dp))
-
-            // Login via otp
             LoginButton(
-                btnName = "Login via OTP"
+                btnName = "Login via OTP",
+                isEnabled = otpState.all { it.isNotEmpty() }
             ) {
-                viewModel.loginViaOtp(
-                    LoginViaOtpRequestDto(
-                        mobileNo = "+91${mobileNumberState.value}",
-                        otp = data.otp.toString(),
-                        fcmToken = "RANDOM"
+                if (otpState.size == 6) {
+                    viewModel.loginViaOtp(
+                        LoginViaOtpRequestDto(
+                            emailId = emailIdState.value,
+                            otp = requestOtpState.data.otp.toString(),
+                            fcmToken = "RANDOM"
+                        )
                     )
-                )
+                }
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-
         } ?: LoginButton(
-            btnName = "Request OTP"
+            btnName = "Request OTP",
+            isEnabled = isEmailValid.value
         ) {
-            viewModel.getOtp("+91${mobileNumberState.value}")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Login via Google Button
-        OutlinedButton(
-            onClick = {
-
-            },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            ) {
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "Login via Google",
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center,
-                color = Color.Black
-            )
+            viewModel.getOtp(emailIdState.value)
         }
     }
 }
@@ -191,11 +178,17 @@ fun LoginScreen(
 @Composable
 fun LoginButton(
     btnName: String,
-    onButtonPressed: () -> Unit) {
+    isEnabled: Boolean,
+    onButtonPressed: () -> Unit
+) {
     Button(
         onClick = onButtonPressed,
-        modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B)),
+        enabled = isEnabled, // Ensuring the button respects the isEnabled state
+        shape = RoundedCornerShape(8.dp) // Adding rounded corners
     ) {
         Text(
             text = btnName,
@@ -206,4 +199,5 @@ fun LoginButton(
 }
 
 
+val emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$".toRegex()
 

@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     data object PreAuthScreen: Screen("pre_auth")
     data object SplashScreen: Screen("splash")
     data object SplitExpenseScreen: Screen("split_expense")
+    data object LocationScreen: Screen("location_screen")
 }

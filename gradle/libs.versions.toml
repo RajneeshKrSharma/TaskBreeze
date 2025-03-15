@@ -1,13 +1,13 @@
 [versions]
-agp = "8.5.0"
+agp = "8.9.0"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.9.3"
-composeBom = "2024.12.01"
+activityCompose = "1.10.1"
+composeBom = "2025.03.00"
 daggerVersion = "2.53"
 daggerCompiler = "2.53"
 androidHilt = "1.0.0-alpha03"
@@ -15,7 +15,9 @@ retrofitVersion = "2.9.0"
 roomVersion = "2.6.1"
 okhttpVersion = "5.0.0-alpha.3"
 kotlin-ksp = "2.0.21-1.0.27"
-android-navigation = "2.8.5"
+android-navigation = "2.8.9"
+playServicesLocation = "21.3.0"
+coil-version = "2.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,7 +50,8 @@ okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercept
 androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 kotlin-room = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
-
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+coil-gif = { group = "io.coil-kt", name ="coil-gif", version.ref ="coil-version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

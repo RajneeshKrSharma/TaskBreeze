@@ -23,11 +23,12 @@ class SplitExpenseViewModel @Inject constructor(
             with(getGroupExpenseUseCase.execute()) {
                 when (this) {
                     is Resource.Success -> {
-                        _groupExpenseState.value = this.data ?: com.soul.taskbreeze.post_auth.split_expense.data.remote.dto.GroupExpenseResponseDto.empty()
+                        _groupExpenseState.value = this.data ?: GroupExpenseResponseDto.empty()
                     }
 
                     is Resource.Error -> TODO()
                     is Resource.Loading -> TODO()
+                    is Resource.Default<*> -> TODO()
                 }
             }
         }

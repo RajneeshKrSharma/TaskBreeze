@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,7 +51,14 @@ fun BaseCompose(
         bottomBar = { bottomBar?.invoke() },
         content = { paddingValues ->
             Box(modifier = Modifier.fillMaxSize()) {
-                content(paddingValues)
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
+                    content(paddingValues)
+                }
 
                 // Animated Connectivity Strip with slide animations
                 AnimatedVisibility(

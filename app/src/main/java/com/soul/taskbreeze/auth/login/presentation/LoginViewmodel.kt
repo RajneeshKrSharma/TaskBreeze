@@ -34,12 +34,13 @@ class LoginViewmodel @Inject constructor(
             with(requestOtpUseCase.execute(GetOtpRequestDto(mobileNo = mobileNumber))) {
                 when (this) {
                     is Resource.Success -> {
-                        _getOtpState.value = this.data ?: com.soul.taskbreeze.auth.login.data.remote.dto.GetOtpResponseDto.empty
+                        _getOtpState.value = this.data ?: GetOtpResponseDto.empty
                     }
 
                     is Resource.Error -> TODO()
 
                     is Resource.Loading -> TODO()
+                    is Resource.Default<*> -> TODO()
                 }
             }
         }
@@ -51,12 +52,13 @@ class LoginViewmodel @Inject constructor(
                 when (this) {
                     is Resource.Success -> {
                         sharedPrefConfig.saveAuthToken(this.data?.data?.authData?.key ?: "")
-                        _loginViaOtpState.value = this.data ?: com.soul.taskbreeze.auth.login.data.remote.dto.LoginViaOtpResponseDto.empty
+                        _loginViaOtpState.value = this.data ?: LoginViaOtpResponseDto.empty
                     }
 
                     is Resource.Error -> TODO()
 
                     is Resource.Loading -> TODO()
+                    is Resource.Default<*> -> TODO()
                 }
             }
         }
