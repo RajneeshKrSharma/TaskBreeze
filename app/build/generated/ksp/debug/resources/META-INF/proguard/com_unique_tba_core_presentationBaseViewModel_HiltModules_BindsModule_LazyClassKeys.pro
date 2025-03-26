@@ -1,0 +1,3 @@
+-keep,allowobfuscation,allowshrinking class com.unique.tba.auth.login.presentation.LoginViewmodel
+-keep,allowobfuscation,allowshrinking class com.unique.tba.auth.login.presentation.LoginViewmodel
+-keep,allowobfuscation,allowshrinking class com.unique.tba.core.presentation.BaseViewModel

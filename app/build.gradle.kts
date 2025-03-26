@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    namespace = "com.soul.taskbreeze"
+    namespace = "com.unique.tba"
     compileSdk = 35
 
     val mySecretKey: String = project.findProperty("SECRET_DECRYPT_KEY") as? String ?: "default_value"
 
     defaultConfig {
-        applicationId = "com.soul.taskbreeze"
+        applicationId = "com.unique.tba"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.play.services.location)
+    implementation(libs.play.services.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -86,4 +87,7 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.coil.gif)
+    implementation(libs.googleid)
+    implementation(libs.credentials)
+    implementation(libs.credentials.auth)
 }
